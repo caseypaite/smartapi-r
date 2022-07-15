@@ -1,10 +1,10 @@
 Package: smartapi
 Type: Package
-Title: SmartApi-R
+Title: SmartApi-R. A fork of https://github.com/angel-one/smartapi-r
 Version: 0.1.0
 Author: ab-smartapi <smartapi.sdk@gmail.com>
-Maintainer: ab-smartapi <smartapi.sdk@gmail.com>
-Description: Angel Broking openApi integration in R wrapper.
+Maintainer: Casey Paite <ck@live.in>
+Description: Angel Broking openApi integration in R wrapper. https://github.com/caseypaite/smartapi-r
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
