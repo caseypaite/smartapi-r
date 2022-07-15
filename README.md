@@ -6,9 +6,10 @@ SMARTAPI-R is a R library for dealing AMX,that is a set of REST-like HTTP APIs t
 To use this package, create a new project from RStudio using Version Control. Checkout this repository and compile/build the code.
 
 OR 
-You can download a prebuilt zip package from the package subdirectory.
 
-File_path: package\smartapi_0.1.0.zip
+If you use linux on arm64, a precompiled binary is available under package directory. My development is Ubuntu running on ARM64 hardware.
+
+File_path: package\smartapi_0.1.0_R_aarch64.tar.gz
 
 
 ## Usage
