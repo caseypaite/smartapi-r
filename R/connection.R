@@ -336,24 +336,25 @@ create_connection_object <- function(params){
   if(!is.null(params[["proxies"]])){
     object@proxies <- params[["proxies"]]
   }
-  object@publicip<-gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
-  object@localip<-tryCatch({
-    gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
-  },
-  warning=function(war){
-    print(paste("MY WARNING: ", war))
-  },
-  error = function(err)
-  {
-    print(paste("MY ERROR: ", err))
-  },
-  finally = function(f)
-  {
-    print(paste("127.0.0.0"))
-  })
-  ipconfig <- system("ipconfig", intern=TRUE)
-  ipv6 <- ipconfig[grep("IPv6", ipconfig)]
-  object@macaddress <- gsub(".*:? ([[:alnum:]])", "\\1", ipv6)
+
+  # The original code uses "ipconfig" which is available only in Windows platform.
+  # Also "ipconfig" won't give the actual public IP.
+  # object@publicip<-gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
+  # "getip" package is conveniently allows you to obtain both public IP and local IP
+  object@publicip<-getip::getip(type="public")
+
+
+  object@localip<-getip::getip()
+
+  # Modern "unix" based platforms use "ip" tool for network operation. However the same is not available for Windows.
+  # So if the code below would execute based on the platform type. Not tested on OSX and Windows.
+
+  if(.Platform$OS.type == "unix") {
+    object@macaddress <- system("ip link show | grep -Po 'ether \\K.*$'|cut -d ' ' -f1", intern = TRUE)
+  } else {
+    object@macaddress <- system("getmac", intern = TRUE)
+  }
+
   object@accept <- "application/json"
   object@usertype <- "USER"
   object@sourceid <-"WEB"
@@ -374,9 +375,9 @@ generate_session<-function(object,clientCode,password){
   method_params = list("clientcode"=clientCode,"password"=password)
   r <- NULL
   tryCatch({
-    message("inside try catch")
+    # message("inside try catch")
     r<-rest_api_call(object,"POST","api.login",method_params)
-    message(r)
+    # message(r)
     r<-httr::content(r)
 
   },error=function(e){
@@ -421,7 +422,7 @@ generate_token<-function(object,refresh_token){
   r <- NULL
   tryCatch({
     r<-rest_api_call(object,"POST","api.token",method_params)
-    message(r)
+    # message(r) //
     r<-httr::content(r)
 
   },error=function(e){
