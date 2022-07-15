@@ -337,9 +337,17 @@ create_connection_object <- function(params){
     object@proxies <- params[["proxies"]]
   }
 
+  # The original code uses "ipconfig" which is available only in Windows platform.
+  # Also "ipconfig" won't give the actual public IP.
+  # object@publicip<-gsub(".*? ([[:digit:]])", "\\1", system("ipconfig", intern=T)[grep("IPv4", system("ipconfig", intern = T))])
+  # "getip" package is conveniently allows you to obtain both public IP and local IP
   object@publicip<-getip::getip(type="public")
 
+
   object@localip<-getip::getip()
+
+  # Modern "unix" based platforms use "ip" tool for network operation. However the same is not available for Windows.
+  # So if the code below would execute based on the platform type. Not tested on OSX and Windows.
 
   if(.Platform$OS.type == "unix") {
     object@macaddress <- system("ip link show | grep -Po 'ether \\K.*$'|cut -d ' ' -f1", intern = TRUE)
