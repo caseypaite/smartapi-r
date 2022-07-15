@@ -7,7 +7,7 @@ To use this package, create a new project from RStudio using Version Control. Ch
 
 OR 
 
-If you use linux on arm64, a precompiled binary is available under package directory.
+If you use linux on arm64, a precompiled binary is available under package directory. My development is Ubuntu running on ARM64 hardware.
 
 File_path: package\smartapi_0.1.0_R_aarch64.tar.gz
 
