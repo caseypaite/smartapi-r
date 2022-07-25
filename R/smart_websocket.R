@@ -12,7 +12,33 @@ setClass("smartwebSocket",
 
          )
 )
+
 r_url<- "wss://smartapisocket.angelbroking.com/websocket"
+
+#'Create a smart Web Socket connect connection object.
+#'@description This function returns an object of smart web socket connect type, given the
+#'input parametrs.
+#'@param params a list mapping object property name to values. See details
+#'for more.
+#'@details This function creates an S4 object from the input parameters. The
+#'required parameters are api_key, api_secret. If root (the api root), routes
+#'(the list of api endpoints) and login (the login url) is supplied, they are
+#'used. Otherwise the internally defined values are used. Only a single
+#'instance of this class per `api_key` should be initialized.
+#'Parameters should be a named list of all inputs to create a connection.
+#'The important attributes are: api_key( character) - your api key;
+#'api_secret(character) - your api secret (both of these are available on
+#'the developer page in your smart app, and must be supplied during object
+#'creation); refresh_token(character) - should be set after a successful
+#'login flow; access_token(character) - obtained using fetch_access_token
+#'function (which also set the attribute `details`). Some attributes like
+#'root (api root URL), login (smart api specific login URL) and routes (list
+#'of api end points) are optional and recommended to use the default values.
+#'Other attributes which are not implemented are: debug(logical); micro_cache
+#'(logical); session_hook(function); timeout(numeric) and proxies(character).
+#'@return S4 object for smart connect which can be used in further api calls.
+#'@export
+
 smart_connect_object<-function(params){
   object = methods::new("smartwebSocket")
   tryCatch({
